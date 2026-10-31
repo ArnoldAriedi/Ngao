@@ -1,0 +1,35 @@
+name: tests
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: ngao_test
+          POSTGRES_USER: ngao
+          POSTGRES_PASSWORD: ngao_test_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U ngao -d ngao_test"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgresql+psycopg://ngao:ngao_test_password@localhost:5432/ngao_test
+      NGAO_TEST_DATABASE: "1"
+      DEMO_MODE: "true"
+      NGAO_TEST_OWNER_URL: postgresql+psycopg://ngao:ngao_test_password@localhost:5432/ngao_test
+      NGAO_TEST_APP_URL: postgresql+psycopg://ngao_app:ci-runtime-role-password-123456@localhost:5432/ngao_test
+      NGAO_TEST_APP_PASSWORD: ci-runtime-role-password-123456
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements.txt -r requirements-dev.txt
+      - run: playwright install --with-deps chromium
+      - run: python tests/tools/lint.py
+      - run: python tests/tools/verify_tests.py
+      - run: pytest

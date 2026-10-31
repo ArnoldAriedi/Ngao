@@ -1,0 +1,10 @@
+# Install as /etc/cron.d/ngao (root-owned, mode 0644). Times are server time; keep the server on UTC.
+# Kenya is UTC+3 all year, so 05:00 UTC is 08:00 in Nairobi.
+#
+# /etc/ngao/env holds the app's settings (DATABASE_URL, APP_SECRET, SMTP_*, ...), readable only by the ngao user.
+SHELL=/bin/bash
+PATH=/usr/local/bin:/usr/bin:/bin
+
+*/15 * * * * ngao cd /opt/ngao && set -a && . /etc/ngao/env && set +a && .venv/bin/python -m scripts.enforce_deadlines >> /var/log/ngao/jobs.log 2>&1
+0 * * * *    ngao cd /opt/ngao && set -a && . /etc/ngao/env && set +a && .venv/bin/python -m scripts.queue_digest >> /var/log/ngao/jobs.log 2>&1
+0 5 * * 1    ngao cd /opt/ngao && set -a && . /etc/ngao/env && set +a && .venv/bin/python -m scripts.check_rota /etc/ngao/rota.csv --days 30 --minimum 2 >> /var/log/ngao/jobs.log 2>&1

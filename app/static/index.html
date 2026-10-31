@@ -1,0 +1,681 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#222426">
+  <title>Ngao</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 200'%3E%3Cpath d='M60 4C98 30 112 78 112 100C112 122 98 170 60 196C22 170 8 122 8 100C8 78 22 30 60 4Z' fill='%23000'/%3E%3Cpath d='M60 22C90 44 100 80 100 100C100 120 90 156 60 178C30 156 20 120 20 100C20 80 30 44 60 22Z' fill='%23bb0000'/%3E%3Cellipse cx='60' cy='100' rx='11' ry='56' fill='%23fff'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+  <style>
+    :root {
+      --black: #000;
+      --red: #bb0000;
+      --green: #006600;
+      --white: #fff;
+      --grey: #595959;
+      --wash: #f2f2f2;
+      --display: "Archivo", "Arial Black", system-ui, sans-serif;
+      --text: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-padding-top: 1rem; }
+    body {
+      margin: 0;
+      font: 1.0625rem/1.55 var(--text);
+      color: var(--black);
+      background: var(--white);
+      padding-bottom: env(safe-area-inset-bottom, 0);
+    }
+    :focus-visible { outline: 3px solid var(--green); outline-offset: 2px; }
+    [hidden] { display: none !important; }
+
+    .flag {
+      height: 14px;
+      background: linear-gradient(var(--black) 0 30%, var(--white) 30% 36%, var(--red) 36% 64%, var(--white) 64% 70%, var(--green) 70%);
+      border-block: 1px solid var(--black);
+      padding-top: env(safe-area-inset-top, 0);
+      box-sizing: content-box;
+    }
+    .wrap { max-width: 62rem; margin: 0 auto; padding: 0 1.25rem; }
+
+    .bar { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 1rem; }
+    .brand { display: flex; align-items: center; gap: .6rem; font: 900 1.5rem/1 var(--display); font-stretch: 125%; letter-spacing: -.01em; }
+    .brand svg { width: 1.6rem; height: 2.4rem; }
+    .bar-end { display: flex; align-items: center; gap: .75rem; }
+    .verified { display: inline-flex; align-items: center; gap: .35rem; color: var(--green); font-weight: 700; font-size: .95rem; }
+    .verified::before { content: ""; width: .6rem; height: .6rem; background: var(--green); border-radius: 50%; }
+
+    h1, h2, h3 { font-family: var(--display); margin: 0; line-height: 1.05; }
+    h2 { font-size: 1.9rem; font-weight: 800; font-stretch: 112%; letter-spacing: -.01em; }
+    h3 { font-size: 1.15rem; font-weight: 800; font-stretch: 100%; }
+    h1:focus, h2:focus { outline: none; }
+    p { margin: 0 0 1rem; max-width: 62ch; }
+    .grey { color: var(--grey); }
+
+    .btn {
+      font: 700 1rem/1 var(--text);
+      padding: .95rem 1.4rem;
+      border: 2px solid var(--black);
+      border-radius: 2px;
+      background: var(--white);
+      color: var(--black);
+      cursor: pointer;
+      min-height: 3rem;
+    }
+    .btn.red { background: var(--red); border-color: var(--red); color: var(--white); }
+    .btn.black { background: var(--black); color: var(--white); }
+    .btn.quiet { border-color: transparent; padding-inline: .5rem; text-decoration: underline; text-underline-offset: .2em; }
+    .btn:disabled { opacity: .55; cursor: progress; }
+    .row { display: flex; flex-wrap: wrap; gap: .75rem; }
+
+    .hero { display: grid; gap: 2rem; align-items: center; padding-block: 1.5rem 3rem; }
+    .hero .mark { width: min(15rem, 56vw); height: auto; justify-self: start; animation: raise .7s cubic-bezier(.2, .8, .2, 1) both; }
+    .hero h1 { font-size: clamp(4.5rem, 20vw, 9.5rem); font-weight: 900; font-stretch: 125%; letter-spacing: -.03em; }
+    .hero .gloss { margin: .6rem 0 1.4rem; color: var(--grey); }
+    .hero .lede { font-size: 1.25rem; line-height: 1.4; max-width: 34rem; }
+    @keyframes raise { from { opacity: 0; transform: translateY(14px) scale(.94); } }
+    @media (min-width: 46rem) { .hero { grid-template-columns: auto 1fr; gap: 3.5rem; } .hero .mark { width: 17rem; } }
+
+    .panel { max-width: 34rem; padding-block: 1.5rem 3rem; }
+    .panel > p:first-of-type { margin-top: .75rem; }
+    form { display: grid; gap: 1.1rem; margin-top: 1.5rem; }
+    label { display: grid; gap: .3rem; font-weight: 700; }
+    label small { font-weight: 400; color: var(--grey); }
+    input, select, textarea {
+      font: inherit; font-weight: 400;
+      width: 100%; padding: .8rem .85rem; min-height: 3rem;
+      border: 2px solid var(--black); border-radius: 2px; background: var(--white); color: var(--black);
+    }
+    .notice { border-left: 6px solid var(--green); background: var(--wash); padding: .8rem 1rem; margin: 1rem 0 0; }
+    .notice.red { border-left-color: var(--red); }
+    .error { border-left: 6px solid var(--red); padding: .6rem 1rem; background: var(--wash); font-weight: 700; margin: 0; }
+
+    .finder { display: grid; gap: 2rem; padding-block: 1rem 2rem; }
+    @media (min-width: 52rem) { .finder { grid-template-columns: 19rem 1fr; gap: 3.5rem; align-items: start; } .controls { position: sticky; top: 1rem; } }
+    .rings { width: min(17rem, 80vw); display: block; margin: 0 0 1rem; }
+    .rings use { fill: var(--white); stroke: var(--black); stroke-width: 1.5; transition: fill .2s; }
+    .rings .band { cursor: pointer; }
+    .rings .band.on use { fill: rgb(187 0 0 / .16); }
+    .rings text { font: 800 11px var(--display); text-anchor: middle; fill: var(--black); pointer-events: none; }
+    .rings .you { fill: var(--green); }
+    .rings .youtext { font: 700 6px var(--text); fill: var(--green); }
+    .bands { display: grid; grid-template-columns: repeat(3, 1fr); border: 2px solid var(--black); margin-bottom: 1.25rem; }
+    .bands button { font: 700 .9rem/1.25 var(--text); padding: .6rem .3rem; border: 0; background: var(--white); cursor: pointer; min-height: 3rem; }
+    .bands button + button { border-left: 2px solid var(--black); }
+    .bands button[aria-pressed="true"] { background: var(--black); color: var(--white); }
+    .controls .btn { width: 100%; }
+    .controls label { margin-bottom: 1rem; }
+    details { margin: 0 0 1rem; }
+    summary { cursor: pointer; font-weight: 700; padding: .4rem 0; }
+    .coords { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-top: .5rem; }
+
+    .results h2 { margin-bottom: .25rem; }
+    .record { border-top: 2px solid var(--black); border-left: 8px solid var(--black); padding: 1.1rem 0 1.2rem 1.1rem; }
+    .record.permanent { border-left-color: var(--red); }
+    .record:last-child { border-bottom: 2px solid var(--black); }
+    .record .what { margin: .2rem 0 .8rem; }
+    .record dl { display: grid; gap: .45rem 1.5rem; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); margin: 0; }
+    .record dt { color: var(--grey); font-size: .9rem; }
+    .record dd { margin: 0; font-weight: 700; }
+    .record .forever { color: var(--red); }
+
+    .my-reports { margin-top: 2rem; }
+    .my-report { border-top: 2px solid var(--black); padding: .8rem 0; }
+    .my-report:last-child { border-bottom: 2px solid var(--black); }
+    .my-report p { margin: .2rem 0 0; }
+    .report { margin: 1rem 0 0; }
+    .report form { margin-top: .5rem; max-width: 32rem; }
+    textarea { resize: vertical; min-height: 6rem; }
+
+    footer { margin-top: 2rem; }
+    footer .wrap { padding-block: 1.5rem 2.5rem; display: grid; gap: 1rem; }
+    footer p { margin: 0; }
+    .help { display: flex; flex-wrap: wrap; gap: .5rem 2rem; font-weight: 700; }
+    .help span { color: var(--red); }
+
+    @media (prefers-reduced-motion: reduce) { .hero .mark { animation: none; } .rings use { transition: none; } }
+
+    /* dark grey theme */
+    :root { --black: #ececec; --white: #222426; --wash: #2d3033; --grey: #a9afb4; --red: #cf2a2e; --redtext: #ff6b6b; --green: #4cc16a; }
+    html { background: #222426; color-scheme: dark; }
+    .flag { background: linear-gradient(#000 0 30%, #fff 30% 36%, #bb0000 36% 64%, #fff 64% 70%, #006600 70%); }
+    .btn.red { color: #fff; }
+    .record .forever, .help span { color: var(--redtext); }
+    .hero .mark, .brand svg { filter: drop-shadow(0 0 1.5px rgb(255 255 255 / .7)); }
+    .rings .band.on use { fill: rgb(207 42 46 / .32); }
+    header, main, footer { position: relative; z-index: 1; }
+    .watermark { position: fixed; left: 50%; top: 50%; width: min(88vw, 36rem); height: auto; transform: translate(-50%, -50%); opacity: .07; pointer-events: none; z-index: 0; }
+
+    .map { margin: 1.25rem 0 1.5rem; max-width: 30rem; }
+    .map svg { width: 100%; height: auto; display: block; background: #1a1c1e; border: 2px solid var(--black); border-radius: 2px; }
+    .map .grid { stroke: #3a3e42; stroke-width: 1; }
+    .map .ring { fill: none; stroke: #5d646a; stroke-width: 1.5; stroke-dasharray: 4 5; }
+    .map .ringlabel { font: 700 11px var(--text); fill: var(--grey); }
+    .map .sweep { fill: rgb(207 42 46 / .22); transform-origin: 200px 200px; animation: sweep 5s linear infinite; }
+    .map .you { fill: var(--green); }
+    .map figcaption { font-size: .9rem; margin-top: .5rem; }
+    .map-info { border-left: 6px solid var(--red); background: var(--wash); padding: .7rem 1rem; margin-top: .75rem; min-height: 4.5rem; }
+    .pin { cursor: pointer; outline: none; }
+    .pin .halo { fill: rgb(255 60 60 / .35); transform-box: fill-box; transform-origin: center; animation: pulse 2s ease-out infinite; }
+    .pin .core { fill: #ff3b3b; stroke: #fff; stroke-width: 1.5; filter: drop-shadow(0 0 5px #ff3b3b); transform-box: fill-box; transform-origin: center; animation: light .6s ease-out both; }
+    .pin:hover .core, .pin:focus-visible .core, .pin.sel .core { stroke-width: 3.5; }
+    @keyframes sweep { to { transform: rotate(360deg); } }
+    @keyframes pulse { from { transform: scale(1); opacity: .9; } to { transform: scale(3.2); opacity: 0; } }
+    @keyframes light { from { opacity: 0; transform: scale(.1); } }
+    @media (prefers-reduced-motion: reduce) { .map .sweep, .pin .halo, .pin .core { animation: none; } }
+  </style>
+</head>
+<body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <path id="almond" vector-effect="non-scaling-stroke" d="M60 4C98 30 112 78 112 100C112 122 98 170 60 196C22 170 8 122 8 100C8 78 22 30 60 4Z"/>
+      <symbol id="mark" viewBox="0 -14 160 244">
+        <g stroke="#000" stroke-width="4" stroke-linecap="round">
+          <path d="M24 216L140 10"/>
+          <path d="M136 216L20 10"/>
+        </g>
+        <path d="M0 -24C8 -12 8 4 0 12C-8 4 -8 -12 0 -24Z" transform="translate(140 10) rotate(30.5)"/>
+        <path d="M0 -24C8 -12 8 4 0 12C-8 4 -8 -12 0 -24Z" transform="translate(20 10) rotate(-30.5)"/>
+        <g transform="translate(20 15)">
+          <use href="#almond" fill="#000"/>
+          <use href="#almond" fill="#fff" transform="translate(60 100) scale(.93) translate(-60 -100)"/>
+          <use href="#almond" fill="#bb0000" transform="translate(60 100) scale(.86) translate(-60 -100)"/>
+          <g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round">
+            <path d="M32 62Q25 100 32 138"/>
+            <path d="M88 62Q95 100 88 138"/>
+          </g>
+          <ellipse cx="60" cy="100" rx="14" ry="72" fill="#fff"/>
+          <ellipse cx="60" cy="100" rx="7" ry="60" fill="#000"/>
+          <ellipse cx="60" cy="100" rx="2.5" ry="40" fill="#bb0000"/>
+        </g>
+      </symbol>
+    </defs>
+  </svg>
+
+  <div class="flag" role="presentation"></div>
+
+  <svg class="watermark" viewBox="0 -14 160 244" aria-hidden="true" focusable="false"><use href="#mark"/></svg>
+
+  <header class="wrap bar">
+    <div class="brand">
+      <svg viewBox="0 0 120 200" aria-hidden="true"><use href="#almond" fill="#000"/><use href="#almond" fill="#bb0000" transform="translate(60 100) scale(.82) translate(-60 -100)"/><ellipse cx="60" cy="100" rx="11" ry="56" fill="#fff"/></svg>
+      Ngao
+    </div>
+    <div class="bar-end">
+      <span class="verified" id="badge" hidden>Verified</span>
+      <button class="btn quiet" id="signout" type="button" hidden>Sign out</button>
+      <button class="btn" id="nav-login" type="button">Sign in</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <p class="error" id="boot-error" role="alert" hidden></p>
+    <section id="welcome" class="hero">
+      <svg class="mark" viewBox="0 -14 160 244" role="img" aria-label="A red Maasai shield with crossed spears"><use href="#mark"/></svg>
+      <div>
+        <h1 tabindex="-1">Ngao</h1>
+        <p class="gloss">Ngao, shielding the community.</p>
+        <p class="lede">See court-recorded convictions for gender-based violence, sexual assault, child sexual offences, child trafficking and child labour within <span data-radius>15</span> km of you.</p>
+        <p>Open to verified accounts only. Each account is tied to one email address, one phone number and one national ID.</p>
+        <div class="row">
+          <button class="btn red" type="button" data-go="signup">Create account</button>
+          <button class="btn" type="button" data-go="login">Sign in</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="signup" class="panel" hidden>
+      <h2 tabindex="-1">Create your account</h2>
+      <p>We check your national ID, then send one code to your email and one to your phone.</p>
+      <p class="notice red" id="demo-id-note" hidden>Demo mode: your national ID is not checked against any registry, and every record is fictional.</p>
+      <form id="signup-form" novalidate>
+        <label>Full name as on your ID<input name="full_name" autocomplete="name" required></label>
+        <label>Email address<input name="email" type="email" autocomplete="email" required></label>
+        <label>Mobile number<input name="phone" type="tel" autocomplete="tel" placeholder="0712 345 678" required></label>
+        <label>National ID number<small>Stored only as a one-way hash.</small><input name="national_id" inputmode="numeric" autocomplete="off" required></label>
+        <label>Password<small>At least 10 characters.</small><input name="password" type="password" autocomplete="new-password" minlength="10" required></label>
+        <p class="error" id="signup-error" role="alert" hidden></p>
+        <div class="row">
+          <button class="btn red" type="submit">Send my codes</button>
+          <button class="btn quiet" type="button" data-go="welcome">Back</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="verify" class="panel" hidden>
+      <h2 tabindex="-1">Enter your two codes</h2>
+      <p>One was sent to <strong id="verify-email"></strong> and one to your phone. They expire in 10 minutes.</p>
+      <p class="notice" id="demo-codes" hidden></p>
+      <form id="verify-form" novalidate>
+        <label>Email code<input name="email_code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" required></label>
+        <label>Phone code<input name="phone_code" inputmode="numeric" autocomplete="off" maxlength="6" required></label>
+        <p class="error" id="verify-error" role="alert" hidden></p>
+        <div class="row">
+          <button class="btn red" type="submit">Confirm and continue</button>
+          <button class="btn" id="resend" type="button">Send new codes</button>
+          <button class="btn quiet" type="button" data-go="signup">Start again</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="login" class="panel" hidden>
+      <h2 tabindex="-1">Sign in</h2>
+      <form id="login-form" novalidate>
+        <label>Email address<input name="email" type="email" autocomplete="email" required></label>
+        <label>Password<input name="password" type="password" autocomplete="current-password" required></label>
+        <p class="error" id="login-error" role="alert" hidden></p>
+        <div class="row">
+          <button class="btn red" type="submit">Sign in</button>
+          <button class="btn quiet" type="button" data-go="signup">Create account</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="search" class="finder" hidden>
+      <div class="controls">
+        <svg class="rings" id="rings" viewBox="0 0 120 200" aria-hidden="true">
+          <g class="band" data-band="15"><use href="#almond"/><text x="60" y="26" data-count="15">0</text></g>
+          <g class="band" data-band="10"><use href="#almond" transform="translate(60 100) scale(.667) translate(-60 -100)"/><text x="60" y="58" data-count="10">0</text></g>
+          <g class="band" data-band="5"><use href="#almond" transform="translate(60 100) scale(.333) translate(-60 -100)"/><text x="60" y="90" data-count="5">0</text></g>
+          <circle class="you" cx="60" cy="102" r="3"/>
+          <text class="youtext" x="60" y="115">You</text>
+        </svg>
+        <div class="bands" id="bands" role="group" aria-label="Distance from you">
+          <button type="button" data-band="5" aria-pressed="false">0–5 km</button>
+          <button type="button" data-band="10" aria-pressed="false">5–10 km</button>
+          <button type="button" data-band="15" aria-pressed="false">10–15 km</button>
+        </div>
+        <label>Type of conviction
+          <select id="category"><option value="">All types</option></select>
+        </label>
+        <button class="btn red" id="locate" type="button">Search near me</button>
+        <details>
+          <summary>Enter coordinates instead</summary>
+          <div class="coords">
+            <label>Latitude<input id="lat" type="number" step="any" placeholder="-1.2864"></label>
+            <label>Longitude<input id="lon" type="number" step="any" placeholder="36.8172"></label>
+          </div>
+          <button class="btn black" id="search-coords" type="button" style="margin-top:.75rem">Search</button>
+        </details>
+      </div>
+
+      <div class="results">
+        <h2 tabindex="-1" id="results-title">Convictions near you</h2>
+        <p class="grey" id="results-sub">Ngao does not save the location you search from.</p>
+        <p class="notice red" id="demo-banner" hidden>Demo mode. Every record here is fictional.</p>
+        <p class="error" id="search-error" role="alert" hidden></p>
+        <figure class="map" id="map-wrap" hidden>
+          <svg viewBox="0 0 400 400" role="img" aria-label="Schematic map. Red markers show listed convictions by distance from you. Direction is not shown.">
+            <defs>
+              <pattern id="gridp" width="40" height="40" patternUnits="userSpaceOnUse"><path class="grid" d="M40 0H0V40" fill="none"/></pattern>
+              <clipPath id="disc"><circle cx="200" cy="200" r="190"/></clipPath>
+            </defs>
+            <g clip-path="url(#disc)"><rect width="400" height="400" fill="url(#gridp)"/><path class="sweep" d="M200 200L390 200A190 190 0 0 1 364.5 295Z"/></g>
+            <circle class="ring" cx="200" cy="200" r="60"/><circle class="ring" cx="200" cy="200" r="120"/><circle class="ring" cx="200" cy="200" r="180"/>
+            <text class="ringlabel" x="204" y="137">5 km</text><text class="ringlabel" x="204" y="77">10 km</text><text class="ringlabel" x="204" y="17">15 km</text>
+            <circle class="you" cx="200" cy="200" r="5"/><text class="ringlabel" x="210" y="218">You</text>
+            <g id="pins"></g>
+          </svg>
+          <figcaption class="grey">Schematic only. Distance from you is real (rounded up). Direction is not shown, so markers never reveal where anyone lives.</figcaption>
+          <div class="map-info" id="map-info" aria-live="polite"></div>
+        </figure>
+        <div id="list" aria-live="polite"></div>
+        <details class="my-reports" id="reports" hidden>
+          <summary>Your reports</summary>
+          <div id="reports-list"></div>
+        </details>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="flag" role="presentation"></div>
+    <div class="wrap">
+      <p><strong>A listing is a court record. It is not a reason to confront anyone.</strong> Distances are rounded up and locations are approximate. If a record looks wrong, use Report a mistake on that record.</p>
+      <p class="help"><span>In danger: 999 or 112</span><span>Gender-based violence: 1195</span><span>Child abuse: 116</span></p>
+    </div>
+  </footer>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+  const esc = (value) => String(value ?? "").replace(/[&<>"']/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]));
+  const VIEWS = ["welcome", "signup", "verify", "login", "search"];
+  const state = { records: [], band: null, labels: {}, reasons: [], email: "", password: "", searched: false, maxRadius: 15 };
+  const token = {
+    get: () => sessionStorage.getItem("ngao_token"),
+    set: (value) => sessionStorage.setItem("ngao_token", value),
+    clear: () => sessionStorage.removeItem("ngao_token"),
+  };
+
+  function show(name) {
+    VIEWS.forEach((view) => { $(view).hidden = view !== name; });
+    const signedIn = Boolean(token.get());
+    $("badge").hidden = $("signout").hidden = !signedIn;
+    $("nav-login").hidden = signedIn;
+    $(name).querySelector("h1, h2")?.focus();
+    window.scrollTo(0, 0);
+  }
+
+  function reason(detail) {
+    if (Array.isArray(detail)) return detail.map((item) => item.msg.replace(/^Value error, /, "")).join(". ");
+    return detail || "Something went wrong. Try again.";
+  }
+
+  async function api(path, { method = "GET", body, auth = false } = {}) {
+    const headers = {};
+    if (body) headers["Content-Type"] = "application/json";
+    if (auth) headers.Authorization = `Bearer ${token.get()}`;
+    const response = await fetch(path, { method, headers, body: body && JSON.stringify(body) });
+    const data = await response.json().catch(() => ({}));
+    if (response.status === 401 && auth) {
+      token.clear();
+      show("login");
+      throw new Error(reason(data.detail));
+    }
+    if (!response.ok) {
+      const failure = new Error(reason(data.detail));
+      failure.status = response.status;
+      throw failure;
+    }
+    return data;
+  }
+
+  function fail(id, error) {
+    const box = $(id);
+    box.textContent = error.message;
+    box.hidden = false;
+  }
+
+  function submit(formId, errorId, work) {
+    $(formId).addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const button = event.submitter;
+      $(errorId).hidden = true;
+      button.disabled = true;
+      try {
+        await work(Object.fromEntries(new FormData(event.target)));
+      } catch (error) {
+        fail(errorId, error);
+      } finally {
+        button.disabled = false;
+      }
+    });
+  }
+
+  document.querySelectorAll("[data-go]").forEach((el) => el.addEventListener("click", () => show(el.dataset.go)));
+  $("nav-login").addEventListener("click", () => show("login"));
+  $("signout").addEventListener("click", () => { token.clear(); state.records = []; state.searched = false; $("reports").hidden = true; show("welcome"); });
+
+  function deliveryProblem(delivered) {
+    const missing = ["email", "phone"].filter((channel) => delivered && delivered[channel] === false);
+    if (!missing.length) return "";
+    return `Your account is saved, but we could not send your ${missing.join(" or ")} code. Choose Send new codes to try again.`;
+  }
+
+  function startVerify(reply, notice) {
+    state.email = reply.email;
+    $("verify-email").textContent = reply.email;
+    const demo = reply.demo_codes;
+    const lines = [notice, deliveryProblem(reply.delivered), demo && `Demo mode: your email code is ${demo.email} and your phone code is ${demo.phone}.`].filter(Boolean);
+    $("demo-codes").hidden = !lines.length;
+    $("demo-codes").textContent = lines.join(" ");
+    $("verify-error").hidden = true;
+    show("verify");
+  }
+
+  submit("signup-form", "signup-error", async (fields) => {
+    state.password = fields.password;
+    startVerify(await api("/api/v1/auth/register", { method: "POST", body: fields }));
+  });
+
+  submit("verify-form", "verify-error", async (fields) => {
+    const reply = await api("/api/v1/auth/verify", { method: "POST", body: { ...fields, email: state.email } });
+    token.set(reply.token);
+    state.password = "";
+    enterSearch();
+  });
+
+  submit("login-form", "login-error", async (fields) => {
+    try {
+      const reply = await api("/api/v1/auth/login", { method: "POST", body: fields });
+      token.set(reply.token);
+      enterSearch();
+    } catch (error) {
+      if (error.status !== 403) throw error;
+      const reply = await api("/api/v1/auth/resend", { method: "POST", body: fields });
+      state.password = fields.password;
+      startVerify(reply, "Your account was not confirmed yet, so we sent new codes.");
+    }
+  });
+
+  $("resend").addEventListener("click", async (event) => {
+    const button = event.currentTarget;
+    $("verify-error").hidden = true;
+    button.disabled = true;
+    try {
+      const reply = await api("/api/v1/auth/resend", { method: "POST", body: { email: state.email, password: state.password } });
+      startVerify(reply, "New codes sent. The old ones no longer work.");
+    } catch (error) {
+      fail("verify-error", error);
+    } finally {
+      button.disabled = false;
+    }
+  });
+
+  function enterSearch() {
+    show("search");
+    renderResults();
+    loadReports();
+  }
+
+  function fmtMonth(iso) {
+    return new Date(iso).toLocaleDateString("en-KE", { month: "short", year: "numeric" });
+  }
+
+  function fmtDay(iso) {
+    return new Date(iso).toLocaleDateString("en-KE", { day: "numeric", month: "short", year: "numeric" });
+  }
+
+  const REPORT_STATUS = { OPEN: "Waiting for review", IN_REVIEW: "Being reviewed", RESOLVED: "Accepted", REJECTED: "Not accepted" };
+
+  async function loadReports() {
+    try {
+      const reports = await api("/api/v1/safety/corrections", { auth: true });
+      $("reports").hidden = !reports.length;
+      $("reports-list").innerHTML = reports.map((report) => `
+        <div class="my-report">
+          <strong>Reference ${esc(report.reference)}</strong> on ${esc(report.public_record_id)}: ${esc(REPORT_STATUS[report.status] || report.status)}
+          ${report.review_by ? `<p class="grey">Review due by ${esc(fmtDay(report.review_by))}</p>` : ""}
+          ${report.record_hidden ? `<p>This record is hidden from other people while we check it.</p>` : ""}
+          ${report.resolution_note ? `<p>${esc(report.resolution_note)}</p>` : ""}
+        </div>`).join("");
+    } catch (error) {
+      $("reports").hidden = true;
+    }
+  }
+
+  function bandOf(km) {
+    return km <= 5 ? 5 : km <= 10 ? 10 : 15;
+  }
+
+  function angleFor(id) {
+    let h = 0;
+    for (const ch of String(id)) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+    return (h % 3600) / 3600 * 2 * Math.PI;
+  }
+
+  function renderMap(shown) {
+    const wrap = $("map-wrap");
+    wrap._shown = shown;
+    wrap.hidden = !shown.length;
+    $("map-info").textContent = "Select a red marker to see the record.";
+    $("pins").innerHTML = shown.map((record, i) => {
+      const angle = angleFor(record.public_record_id);
+      const dist = Math.min(Math.max(record.distance_km, 1) / state.maxRadius, 1) * 180;
+      const x = (200 + dist * Math.cos(angle)).toFixed(1), y = (200 + dist * Math.sin(angle)).toFixed(1);
+      const label = `${state.labels[record.offense_category] || record.offense_category}, within ${record.distance_km} km`;
+      const delay = `style="animation-delay:${(i * 0.15).toFixed(2)}s"`;
+      return `<g class="pin" tabindex="0" role="button" aria-label="${esc(label)}" data-i="${i}" transform="translate(${x} ${y})"><circle class="halo" r="7" ${delay}/><circle class="core" r="7" ${delay}/></g>`;
+    }).join("");
+  }
+
+  function showPin(pin) {
+    const record = $("map-wrap")._shown[Number(pin.dataset.i)];
+    if (!record) return;
+    document.querySelectorAll("#pins .pin").forEach((el) => el.classList.toggle("sel", el === pin));
+    const forever = record.listed_until === null;
+    const repeat = record.convictions_count > 1 ? `, ${record.convictions_count} convictions` : "";
+    $("map-info").innerHTML = `<strong>${esc(state.labels[record.offense_category] || record.offense_category)}</strong><br>${esc(record.offense_label)}<br>Within ${esc(record.distance_km)} km, ${esc(record.area_label)}, ${esc(record.county)}<br>Convicted ${esc(fmtMonth(record.judgment_date))}${esc(repeat)}. Listed ${forever ? "permanently" : "until " + esc(fmtMonth(record.listed_until))}.`;
+  }
+
+  ["click", "mouseover", "focusin"].forEach((type) => $("pins").addEventListener(type, (event) => {
+    const pin = event.target.closest(".pin");
+    if (pin) showPin(pin);
+  }));
+
+  function renderResults() {
+    const counts = { 5: 0, 10: 0, 15: 0 };
+    state.records.forEach((record) => { counts[bandOf(record.distance_km)] += 1; });
+    document.querySelectorAll("[data-count]").forEach((el) => { el.textContent = counts[el.dataset.count]; });
+    document.querySelectorAll(".rings .band").forEach((el) => el.classList.toggle("on", Number(el.dataset.band) === state.band));
+    document.querySelectorAll("#bands button").forEach((el) => {
+      el.setAttribute("aria-pressed", String(Number(el.dataset.band) === state.band));
+    });
+
+    const shown = state.band ? state.records.filter((record) => bandOf(record.distance_km) === state.band) : state.records;
+    renderMap(state.searched ? shown : []);
+    $("demo-banner").hidden = !state.records.some((record) => record.synthetic);
+    if (!state.searched) {
+      $("list").innerHTML = `<p>Choose Search near me to see listed convictions within ${state.maxRadius} km.</p>`;
+      return;
+    }
+    if (!shown.length) {
+      $("list").innerHTML = `<p>No listed convictions ${state.band ? "in this band" : `within ${state.maxRadius} km`}. This does not mean an area is risk-free.</p>`;
+      return;
+    }
+    const reasonOptions = state.reasons.map(({ code, label }) => `<option value="${esc(code)}">${esc(label)}</option>`).join("");
+    $("list").innerHTML = shown.map((record) => {
+      const forever = record.listed_until === null;
+      const repeat = record.convictions_count > 1 ? `, ${record.convictions_count} convictions` : "";
+      const released = record.release_date ? `<div><dt>Released</dt><dd>${esc(fmtMonth(record.release_date))}</dd></div>` : "";
+      return `
+        <article class="record ${forever ? "permanent" : ""}">
+          <h3>${esc(state.labels[record.offense_category] || record.offense_category)}</h3>
+          <p class="what">${esc(record.offense_label)}</p>
+          <dl>
+            <div><dt>Distance</dt><dd>Within ${esc(record.distance_km)} km</dd></div>
+            <div><dt>Area</dt><dd>${esc(record.area_label)}, ${esc(record.county)}</dd></div>
+            <div><dt>Convicted</dt><dd>${esc(fmtMonth(record.judgment_date))}${esc(repeat)}</dd></div>
+            ${released}
+            <div><dt>Sentence</dt><dd>${esc(record.sentence_description || "Not recorded")}</dd></div>
+            <div><dt>Listed</dt><dd class="${forever ? "forever" : ""}">${forever ? "Permanently, repeat conviction" : "Until " + esc(fmtMonth(record.listed_until))}</dd></div>
+          </dl>
+          <details class="report">
+            <summary>Report a mistake</summary>
+            <form data-record="${esc(record.public_record_id)}">
+              <label>What is wrong<select name="reason">${reasonOptions}</select></label>
+              <label>Details<small>At least 20 characters. Do not include anyone's ID number.</small><textarea name="details" minlength="20" maxlength="2000" required></textarea></label>
+              <p class="error" role="alert" hidden></p>
+              <p class="notice" hidden></p>
+              <button class="btn black" type="submit">Send report</button>
+            </form>
+          </details>
+        </article>`;
+    }).join("");
+  }
+
+  $("list").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const form = event.target, button = event.submitter;
+    const problem = form.querySelector(".error"), done = form.querySelector(".notice");
+    problem.hidden = done.hidden = true;
+    button.disabled = true;
+    try {
+      const path = `/api/v1/safety/records/${encodeURIComponent(form.dataset.record)}/corrections`;
+      const reply = await api(path, { method: "POST", body: Object.fromEntries(new FormData(form)), auth: true });
+      done.textContent = `Report received. Your reference is ${reply.reference}. A reviewer will check it by ${fmtDay(reply.review_by)}.`;
+      done.hidden = false;
+      loadReports();
+    } catch (error) {
+      problem.textContent = error.message;
+      problem.hidden = false;
+      button.disabled = false;
+    }
+  });
+
+  function pickBand(value) {
+    state.band = state.band === value ? null : value;
+    renderResults();
+  }
+  document.querySelectorAll("#bands button, .rings .band").forEach((el) => {
+    el.addEventListener("click", () => pickBand(Number(el.dataset.band)));
+  });
+
+  async function runSearch(latitude, longitude) {
+    $("search-error").hidden = true;
+    $("results-sub").textContent = "Searching…";
+    const body = { latitude: Number(latitude), longitude: Number(longitude), radius_km: state.maxRadius };
+    if ($("category").value) body.category = $("category").value;
+    try {
+      state.records = await api("/api/v1/safety/nearby", { method: "POST", body, auth: true });
+      state.searched = true;
+      $("results-sub").textContent = `${state.records.length} listed within ${state.maxRadius} km. Ngao does not save the location you search from.`;
+      renderResults();
+    } catch (error) {
+      $("results-sub").textContent = "";
+      fail("search-error", error);
+    }
+  }
+
+  $("locate").addEventListener("click", () => {
+    if (!navigator.geolocation) return fail("search-error", new Error("This browser cannot share your location. Enter coordinates instead."));
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => { $("lat").value = coords.latitude; $("lon").value = coords.longitude; runSearch(coords.latitude, coords.longitude); },
+      () => fail("search-error", new Error("Location was not shared. Enter coordinates instead.")),
+      { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 }
+    );
+  });
+
+  $("search-coords").addEventListener("click", () => {
+    const latitude = $("lat").value, longitude = $("lon").value;
+    if (!latitude || !longitude || !Number.isFinite(Number(latitude)) || !Number.isFinite(Number(longitude))) {
+      return fail("search-error", new Error("Enter a valid latitude and longitude."));
+    }
+    runSearch(latitude, longitude);
+  });
+
+  $("category").addEventListener("change", () => {
+    if ($("lat").value && $("lon").value) runSearch($("lat").value, $("lon").value);
+  });
+
+  (async function boot() {
+    const response = await fetch("/api/v1/safety/categories").catch(() => null);
+    if (response && response.ok) {
+      const { categories, correction_reasons, max_radius_km, demo_mode } = await response.json();
+      $("demo-id-note").hidden = !demo_mode;
+      state.reasons = correction_reasons;
+      state.maxRadius = max_radius_km;
+      categories.forEach(({ code, label }) => {
+        state.labels[code] = label;
+        $("category").add(new Option(label, code));
+      });
+      document.querySelectorAll("[data-radius]").forEach((el) => { el.textContent = max_radius_km; });
+      document.querySelectorAll("[data-band]").forEach((el) => { el.hidden = Number(el.dataset.band) - 5 >= max_radius_km; });
+    } else {
+      $("boot-error").textContent = "Ngao could not load its settings. Reload the page, or try again shortly.";
+      $("boot-error").hidden = false;
+    }
+    if (!token.get()) return show("welcome");
+    try {
+      await api("/api/v1/auth/session", { auth: true });
+    } catch (error) {
+      if (!token.get()) return;
+    }
+    enterSearch();
+  })();
+</script>
+</body>
+</html>

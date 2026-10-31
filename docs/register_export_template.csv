@@ -1,0 +1,2 @@
+source_reference,source_name,outcome,offense_category,offense_label,convictions_count,judgment_date,release_date,sentence_description,county,area_label,latitude,longitude
+EXAMPLE-0001,Example court,CONVICTED,SEXUAL_ASSAULT,Sexual assault,1,2022-05-10,,10 years,Nairobi County,Example area,-1.2864,36.8172
