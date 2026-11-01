@@ -421,7 +421,7 @@ def test_demo_mode_is_labelled_on_the_sign_up_screen_only_when_it_applies(app_pa
     assert app_page.evaluate("document.getElementById('demo-id-note').hidden") is hidden
     if demo:
         app_page.click("[data-go=signup]")
-        assert "not checked against any registry" in app_page.locator("#demo-id-note").inner_text()
+        assert "every record is fictional" in app_page.locator("#demo-id-note").inner_text()
 
 
 def test_a_reporter_is_told_when_their_report_is_the_reason_a_record_is_hidden(app_page, api):
