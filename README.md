@@ -155,7 +155,7 @@ make test-ui           # drives the real page in Chromium against a stand-in API
 
 The integration suite wipes every table in the database named by `DATABASE_URL`, so it refuses to run unless that URL contains `test`. The database-hardening test also needs `NGAO_TEST_OWNER_URL`, `NGAO_TEST_APP_URL` and `NGAO_TEST_APP_PASSWORD`, and CI sets all three. `.github/workflows/tests.yml` runs everything on each push.
 
-Do not rely on this suite until it has run green on a real PostgreSQL. It was written and statically cross-checked without being executed against one. `tests/tools/verify_tests.py` compares every test with the real routes, methods, error messages, model fields, settings and fixtures, and it caught every mistake deliberately planted to test it. That is a strong guard against typos and drift, but it proves nothing about behaviour.
+The unit, integration (real PostgreSQL) and browser (Chromium) suites have all run green. `tests/tools/verify_tests.py` still cross-checks every test against the real routes, methods, error messages, model fields, settings and fixtures. Passing tests show the tested behaviour works; they do not show the app is ready for real data. The email, SMS and ID-check integrations have been tested against local stand-ins, not live accounts, and see `docs/LEGAL_AND_PRIVACY_CHECKLIST.md` before any real launch.
 
 ## Scheduled jobs and staffing
 
