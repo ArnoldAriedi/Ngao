@@ -1,5 +1,31 @@
 # Ngao
 
+> **Live demo:** https://ngao-9rgh.onrender.com
+> Fictional data only. The free host sleeps when idle, so the first load can take up to a minute.
+
+<p align="center">
+  <img src="docs/screenshots/overview.jpg" width="230" alt="The three-ring shield showing how many records fall in each distance band">
+  <img src="docs/screenshots/map.jpg" width="230" alt="Schematic radar map with red markers for records within 5 km">
+  <img src="docs/screenshots/records.jpg" width="230" alt="Record cards with distance, area, conviction date and listing period">
+</p>
+
+**Try the demo**
+
+1. Register with made-up details. Verification codes appear on screen, and nothing real is sent.
+2. Press **Enter coordinates instead** and search `-1.286`, `36.817` (central Nairobi), where the fictional records are.
+3. Tap a red marker on the map to see the record.
+
+**What is in it**
+
+- Verified-user search with a 15 km radius, distances rounded up, and a schematic radar map that never reveals direction.
+- Staff review workflow with role-based permissions, two-factor (TOTP) staff login and an audit trail.
+- Privacy by design: coordinates are rounded, and public records carry no names or ID numbers.
+- Rate limiting and per-account quotas, with concurrency tests.
+- Email through Brevo and SMS through Africa's Talking, each with its own adapter and tests.
+- Over 400 automated tests: unit, integration against a real PostgreSQL, and browser tests in Chromium. GitHub Actions runs them.
+
+This is a demo. Real convictions data may only be published with the Judiciary's written authorisation, so the public deployment uses fictional records.
+
 Ngao (Swahili for shield) shows verified users the court-recorded convictions within 15 km of them for:
 
 | Code | Covers |
